@@ -1,0 +1,11 @@
+dist/
+node_modules/
+.DS_Store
+data/
+*.xlsx
+.clasp.json
+.clasprc.json
+.env*
+!.env.example
+__pycache__/
+*.pyc

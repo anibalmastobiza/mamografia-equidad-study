@@ -1,0 +1,13 @@
+{
+  "name": "mamografia-equidad-study",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "build": "node scripts/build.mjs",
+    "serve": "python3 -m http.server 8765 --directory dist",
+    "power": "node analysis/power.mjs"
+  },
+  "engines": { "node": ">=22" }
+}
