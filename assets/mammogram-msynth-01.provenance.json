@@ -1,0 +1,34 @@
+{
+  "asset": "mammogram-msynth-01.jpg",
+  "source_project": "M-SYNTH",
+  "creator": "DIDSR / U.S. Food and Drug Administration",
+  "original_filename": "P100_Dhetero_L7.0_X4.08e09.jpg",
+  "repository": "https://github.com/DIDSR/msynth-release",
+  "commit": "549d5e3ae8dda703c71c3eb031b66edbead5f9e3",
+  "source_url": "https://raw.githubusercontent.com/DIDSR/msynth-release/549d5e3ae8dda703c71c3eb031b66edbead5f9e3/docs/images/P100_Dhetero_L7.0_X4.08e09.jpg",
+  "license": "CC0-1.0",
+  "license_url": "https://github.com/DIDSR/msynth-release/blob/549d5e3ae8dda703c71c3eb031b66edbead5f9e3/LICENSE.txt",
+  "license_copy": "LICENSE-M-SYNTH-CC0.txt",
+  "sha256": "35a96c139285b29be17533a51a791599535ef9d63d1dfeb0c143e07ad08cbbdb",
+  "git_blob_sha1": "946d68abc82ab154bb31500a6986171db385b946",
+  "bytes": 89554,
+  "width": 2000,
+  "height": 1500,
+  "media_type": "image/jpeg",
+  "downloaded_on": "2026-09-26",
+  "modifications": "None. Original byte-for-byte copy.",
+  "source_metadata": {
+    "patient_id": 100,
+    "breast_density": "hetero",
+    "lesion_size": 7,
+    "dose": 4080000000,
+    "filename": "P100_Dhetero_L7.0_X4.08e09.jpg"
+  },
+  "source_metadata_url": "https://raw.githubusercontent.com/DIDSR/msynth-release/549d5e3ae8dda703c71c3eb031b66edbead5f9e3/docs/metadata.json",
+  "notes": [
+    "The source patient_id is a synthetic phantom identifier, not a real patient.",
+    "Dataset documentation describes even phantom IDs as lesion-absent. The nominal lesion_size field is not interpreted as a finding or diagnosis.",
+    "Use the same image in all eight experimental conditions. This is contextual imagery, not a diagnostic task.",
+    "No clinical validation or participant pretest of this survey image has been performed."
+  ]
+}

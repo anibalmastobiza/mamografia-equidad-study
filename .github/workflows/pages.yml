@@ -1,4 +1,4 @@
-name: Validate and publish study preview
+name: Validate and publish study
 on:
   push:
     branches: [main]

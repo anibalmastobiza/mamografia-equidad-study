@@ -53,12 +53,26 @@ export async function buildSite({ sourceDir = path.join(root, 'site'), assetsDir
     await fs.writeFile(path.join(outputDir, filename), result);
   }
   await fs.mkdir(path.join(outputDir, 'assets'), { recursive: true });
-  const assetFiles = (await fs.readdir(assetsDir).catch(() => [])).filter(name => /\.(png|jpe?g|webp)$/i.test(name)).sort();
-  const manifest = { study_version: '1.0.0', build_version: version, image_status: assetFiles.length ? 'pending-human-review' : 'missing', assets: [] };
+  const assetEntries = (await fs.readdir(assetsDir).catch(() => [])).sort();
+  const assetFiles = assetEntries.filter(name => /\.(png|jpe?g|webp)$/i.test(name));
+  const publicMetadata = assetEntries.filter(name => /^[A-Za-z0-9_.-]+\.provenance\.json$/.test(name) || /^LICENSE[A-Za-z0-9_.-]*\.txt$/.test(name));
+  const manifest = { study_version: '1.0.0', build_version: version, image_status: assetFiles.length ? 'synthetic-context-available' : 'missing', clinical_validation: false, assets: [], provenance_files: [] };
+  for (const filename of publicMetadata) {
+    await fs.copyFile(path.join(assetsDir, filename), path.join(outputDir, 'assets', filename));
+    manifest.provenance_files.push(`assets/${filename}`);
+  }
   for (const filename of assetFiles) {
     const bytes = await fs.readFile(path.join(assetsDir, filename));
     await fs.copyFile(path.join(assetsDir, filename), path.join(outputDir, 'assets', filename));
-    manifest.assets.push({ file: filename, sha256: createHash('sha256').update(bytes).digest('hex') });
+    const entry = { file: filename, sha256: createHash('sha256').update(bytes).digest('hex') };
+    const provenanceFile = filename.replace(/\.(png|jpe?g|webp)$/i, '.provenance.json');
+    if (publicMetadata.includes(provenanceFile)) {
+      const provenance = JSON.parse(await fs.readFile(path.join(assetsDir, provenanceFile), 'utf8'));
+      entry.provenance = `assets/${provenanceFile}`;
+      entry.source_url = provenance.source_url;
+      entry.license = provenance.license;
+    }
+    manifest.assets.push(entry);
   }
   await fs.writeFile(path.join(outputDir, '.nojekyll'), '');
   await fs.writeFile(path.join(outputDir, 'stimulus-manifest.json'), JSON.stringify(manifest, null, 2));

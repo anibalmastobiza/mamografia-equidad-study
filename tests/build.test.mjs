@@ -10,7 +10,7 @@ test('actual site output versions HTML assets and every relative module import c
   t.after(() => fs.rm(outputDir, { recursive: true, force: true }));
   await fs.writeFile(path.join(outputDir, 'local-harness.html'), 'preserve');
   const sourceApp = await fs.readFile(new URL('../site/app.js', import.meta.url), 'utf8');
-  const { version } = await buildSite({ outputDir });
+  const { version, manifest } = await buildSite({ outputDir });
   assert.match(version, /^[a-f0-9]{16}$/);
   for (const page of ['index.html', 'investigacion.html']) {
     const html = await fs.readFile(path.join(outputDir, page), 'utf8');
@@ -29,6 +29,14 @@ test('actual site output versions HTML assets and every relative module import c
   assert.ok(importCount >= 4);
   assert.equal(await fs.readFile(path.join(outputDir, 'local-harness.html'), 'utf8'), 'preserve');
   assert.equal(await fs.readFile(new URL('../site/app.js', import.meta.url), 'utf8'), sourceApp);
+  assert.equal(manifest.image_status, 'synthetic-context-available');
+  assert.equal(manifest.clinical_validation, false);
+  const image = manifest.assets.find(asset => asset.file === 'mammogram-msynth-01.jpg');
+  assert.equal(image.license, 'CC0-1.0');
+  assert.match(image.source_url, /^https:\/\/raw\.githubusercontent\.com\/DIDSR\/msynth-release\//);
+  const provenance = JSON.parse(await fs.readFile(path.join(outputDir, image.provenance), 'utf8'));
+  assert.equal(provenance.sha256, image.sha256);
+  assert.ok((await fs.stat(path.join(outputDir, 'assets', 'LICENSE-M-SYNTH-CC0.txt'))).size > 0);
 });
 
 test('build hash is stable and changes when CSS or JavaScript changes', async t => {

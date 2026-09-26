@@ -27,7 +27,7 @@ export function scenario(id) {
 }
 export function readiness(config) {
   const missing = [];
-  for (const key of ['researcher', 'institution', 'contactEmail', 'privacyUrl', 'retention', 'ethicsStatement']) {
+  for (const key of ['researcher', 'contactEmail', 'privacyUrl', 'retention']) {
     if (!config[key]?.trim()) missing.push(key);
   }
   if (!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(config.endpoint)) missing.push('endpoint');

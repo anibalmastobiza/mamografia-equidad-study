@@ -19,6 +19,7 @@ async function run(entries, { reply = 'duplicate', overrides = {} } = {}) {
   const store = new Map(Object.entries(entries).map(([key, value]) => [key, JSON.stringify(value)]));
   const app = { innerHTML: '', focus() {} };
   const banner = { textContent: '' };
+  const passiveElement = { addEventListener() {}, hidden: false };
   const calls = [];
   const context = vm.createContext({
     CONFIG: { mode: 'demo', studyVersion: '1.0.0', consentVersion: '1.0.0',
@@ -33,7 +34,12 @@ async function run(entries, { reply = 'duplicate', overrides = {} } = {}) {
       return { status: reply, ok: true };
     },
     document: {
-      querySelector(selector) { return selector === '#app' ? app : banner; },
+      querySelector(selector) {
+        if (selector === '#app') return app;
+        if (selector === '#mode-banner') return banner;
+        if (selector === '#stimulus') return null;
+        return passiveElement;
+      },
       getElementById() { return { addEventListener() {} }; }
     },
     window: { scrollTo() {} }, location: { search: '' }, URLSearchParams,
@@ -57,7 +63,7 @@ test('pending pilot survives expired exposure and a closed or incomplete configu
   assert.equal(JSON.parse(h.store.get(`${baseKey}:pilot`)).stage, 'pending');
   assert.match(h.app.innerHTML, /No tenemos confirmación/);
   assert.doesNotMatch(h.app.innerHTML, /Demo finalizada/);
-  assert.match(h.banner.textContent, /No se crean nuevas asignaciones/);
+  assert.match(h.banner.textContent, /PARTICIPACIÓN EN CURSO/);
 });
 
 test('only a real recovered ACK turns the preserved pilot submission into confirmed', async () => {
@@ -98,4 +104,23 @@ test('unavailable receiver preserves the pending response without claiming succe
   assert.equal(JSON.parse(h.store.get(`${baseKey}:pilot`)).stage, 'pending');
   assert.match(h.app.innerHTML, /No tenemos confirmación/);
   assert.doesNotMatch(h.app.innerHTML, /Tus respuestas se han guardado|descarg|download/);
+});
+
+test('closed live collection never falls back to a saved demo', async () => {
+  const demo = { ...session('done'), mode: 'demo' };
+  const h = await run({ [`${baseKey}:demo`]: demo }, { overrides: { mode: 'pilot' } });
+  assert.equal(h.calls.length, 0);
+  assert.match(h.app.innerHTML, /no admite nuevas participaciones/);
+  assert.doesNotMatch(h.app.innerHTML, /Explorar la demo|Has completado una demo|Revisar las ocho/);
+});
+
+test('consented active response can continue after new recruitment closes', async () => {
+  const active = { ...session('post'), consentedAt: Date.now() - 30000 };
+  const h = await run({ [`${baseKey}:pilot`]: active }, { overrides: {
+    mode: 'pilot', recruitmentOpen: false, imageApproved: true, imagePath: './assets/mammogram-01.svg'
+  } });
+  assert.equal(h.calls.length, 0);
+  assert.equal(JSON.parse(h.store.get(`${baseKey}:pilot`)).id, id);
+  assert.match(h.app.innerHTML, /Enviar respuestas/);
+  assert.doesNotMatch(h.app.innerHTML, /Finalizar revisión|Finalizar demo|no admite nuevas participaciones/);
 });

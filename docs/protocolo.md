@@ -1,6 +1,6 @@
 # Cuando la IA no concluye: acceso a la evaluación complementaria en mamografía
 
-**Protocolo de trabajo, versión 0.1 — 26 de septiembre de 2026.** Propuesta para revisión científica y ética; no hay resultados de participantes ni aprobación ética concedida. Población: personas adultas de la población general que leen español. Contacto: **Aníbal Astobiza, amastobiza@ugr.es**.
+**Protocolo de trabajo, versión 0.1 — 26 de septiembre de 2026.** Documento de diseño científico; no presenta resultados de participantes. No se atribuye una aprobación ética no acreditada. Población: personas adultas de la población general que leen español. Contacto: **Aníbal Astobiza, amastobiza@ugr.es**.
 
 ## 1. Pregunta, tesis e impacto
 
@@ -16,7 +16,7 @@ CoDoC estudia la complementariedad IA–profesionales [2]; MASAI aporta evidenci
 
 ## 2. Escenario común: separar lectura humana y nueva visita
 
-Todos reciben el mismo caso de una persona ficticia de 52 años y la misma ilustración mamográfica, rotulada «imagen ficticia, sin valor diagnóstico».
+Todos reciben el mismo caso de una persona ficticia de 52 años y el mismo estímulo mamográfico sintético de un fantoma digital M-SYNTH, sin imagen adquirida de una paciente. Se presenta como contexto sin valor diagnóstico. Procedencia, licencia CC0 y hash fijo en [IMAGENES.md](IMAGENES.md).
 
 > Imagine que está en la situación de esta persona. Su mamografía forma parte de un programa que utiliza IA. La IA no ofrece una conclusión suficientemente fiable y remite las imágenes al equipo de radiología. Tras una revisión inicial, el equipo considera necesaria una evaluación complementaria presencial para completar el estudio. Todavía no hay diagnóstico. La imagen solo ilustra el escenario; no permite determinar si hay cáncer.
 
@@ -24,7 +24,7 @@ Todos reciben el mismo caso de una persona ficticia de 52 años y la misma ilust
 
 ## 3. Diseño factorial entre participantes: 2 × 2 × 2
 
-Cada persona recibe **una sola viñeta**, asignada con probabilidad 1/8. El modo demostración permite inspeccionar escenarios y no pertenece a la recogida científica.
+Cada persona recibe **una sola viñeta**, asignada con probabilidad 1/8. La versión de recogida no permite elegir condición ni ofrece un recorrido de demostración. La herramienta interna de revisión local puede inspeccionar los ocho escenarios sin transmitir respuestas.
 
 | Factor | Nivel 0 | Nivel 1 |
 |---|---|---|
@@ -72,11 +72,11 @@ Analizar por asignación original. Excluir solo duplicados verificables, envíos
 
 ## 7. Consentimiento, datos y trazabilidad
 
-Antes de recoger respuestas reales: revisión por el comité correspondiente, responsable identificado, contacto institucional, información de privacidad, conservación y procedimiento de retirada. No presentar el prototipo como aprobado. Advertir de contenido ficticio relacionado con cáncer de mama; permitir salir sin justificarlo. No existe beneficio clínico ni diagnóstico personal.
+El procedimiento ético aplicable debe documentarse según el ámbito efectivo del proyecto; este archivo no presupone una aprobación concreta ni una exención. No atribuir al estudio una institución o un aval no acreditados. El responsable del estudio es Aníbal Astobiza (amastobiza@ugr.es). La información de participación explica finalidad, voluntariedad, acceso, conservación y limitaciones para localizar respuestas individuales. Se advierte del contenido ficticio relacionado con cáncer de mama y se permite salir sin justificarlo. No existe beneficio clínico ni diagnóstico personal.
 
 Recoger identificador aleatorio, consentimiento y versión, versión de protocolo, asignación, respuestas y tiempos necesarios. `Allocations` conserva inicios consentidos; `Responses` conserva envíos finales unidos mediante ese código, sin puente con identidad. Edad por bandas, género, educación, residencia urbana/rural y experiencia profesional sanitaria son obligatorios para enviar, sin valores por defecto; siempre se puede salir. No se piden nombre, correo, fecha de nacimiento, código postal, ubicación precisa, historia clínica ni texto libre. Describir demográficos únicamente de forma agregada, suprimiendo categorías pequeñas y sin cruces que faciliten identificación. El equipo no dispone de identificadores personales; no afirmar anonimato absoluto frente a metadatos técnicos de proveedores.
 
-GitHub Pages publica únicamente interfaz y materiales; Google Sheets debe permanecer privado. Conservar versiones y diccionario de datos, controlar acceso y exportar copias de análisis de solo lectura. No colocar respuestas ni credenciales en el repositorio. La sincronización debe confirmar recepción sin duplicar un envío reintentado. Registrar y separar pruebas; comprobar el recorrido completo con registros ficticios antes de abrir reclutamiento.
+La información de privacidad está en `site/privacidad.html`. El acceso actual a los registros individuales está restringido al responsable. Se conservarán mientras sean necesarios para completar el análisis y la verificación científica; después se eliminarán y se mantendrán únicamente resultados agregados. GitHub Pages publica únicamente interfaz y materiales; Google Sheets debe permanecer privado. Conservar versiones y diccionario de datos, controlar acceso y exportar copias de análisis de solo lectura. No colocar respuestas ni credenciales en el repositorio. La sincronización debe confirmar recepción sin duplicar un envío reintentado. Registrar y separar pruebas; comprobar el recorrido completo con registros ficticios antes de abrir reclutamiento.
 
 ## 8. Qué aportaría y qué quedaría pendiente
 

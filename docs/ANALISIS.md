@@ -28,7 +28,7 @@ No se recogen nombre, correo, fecha de nacimiento, código postal, ubicación pr
 
 El validador detiene la ejecución si encuentra cabeceras inesperadas o repetidas, identificadores duplicados —incluso filas idénticas—, versiones mezcladas, un modo distinto de `pilot`, JSON incorrecto, valores fuera del contrato, huellas de contenido incoherentes, respuestas sin asignación o una asignación contradictoria. No limpia problemas silenciosamente. Resolverlos en el origen y conservar un registro de cualquier corrección.
 
-Las versiones esperadas son estudio `1.0.0` y consentimiento `1.0.0`; una revisión del protocolo o del estímulo exige revisar la versión antes de recoger otra cohorte. `mode=pilot` permite ensayar la recogida, pero no hace confirmatorio un piloto: **no mezclar sus datos con la cohorte principal**. Para esta última deben congelarse materiales, versión y prerregistro.
+Las versiones esperadas son estudio `1.0.0` y consentimiento `1.0.0`; una revisión del protocolo o del estímulo exige revisar la versión antes de recoger otra cohorte. `mode=pilot` es el valor técnico utilizado para envíos reales: no identifica por sí mismo si una cohorte es un piloto científico o el estudio principal. Los ensayos de software usan un destino separado. Si se realiza un piloto cognitivo previo, **no mezclar sus datos con la cohorte principal**; esta requiere materiales, versión y análisis previamente fijados.
 
 ## Cómo ejecutar
 

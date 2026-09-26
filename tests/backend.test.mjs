@@ -128,9 +128,9 @@ test('setup creates exact headers and keeps collection closed; repeated setup pr
   assert.equal(h.properties.get('LIVE_ENABLED'), 'true');
 });
 
-test('collection gate rejects pilot until deliberately enabled', () => {
+test('collection gate rejects new allocations until deliberately enabled', () => {
   const h = harness();
-  const message = ack(h.context.doPost(request()));
+  const message = ack(h.context.doPost(request(allocation())));
   assert.equal(message.ok, false);
   assert.equal(message.code, 'COLLECTION_CLOSED');
   assert.equal(h.sheet.cells.length, 1);
@@ -147,18 +147,37 @@ test('closed collection confirms existing events without permitting new rows or 
   assert.equal(ack(h.context.doPost(request(changed))).code, 'CONFLICT');
   const another = payload(); another.submission_id = '77777777-7777-4777-8777-777777777777';
   assert.equal(ack(h.context.doPost(request(allocation(another)))).code, 'COLLECTION_CLOSED');
-  assert.equal(ack(h.context.doPost(request(another))).code, 'COLLECTION_CLOSED');
+  assert.equal(ack(h.context.doPost(request(another))).code, 'ALLOCATION_REQUIRED');
   assert.equal(h.state.writes, writesBefore);
   assert.equal(h.sheet.cells.length, 2);
   assert.equal(h.sheets.get('Allocations').cells.length, 2);
 });
 
-test('closed collection rejects a new response even when its allocation already exists', () => {
+test('closed enrollment still accepts the final response of an existing allocation', () => {
   const h = harness(); h.enroll();
   h.properties.set('LIVE_ENABLED', 'false');
   assert.equal(ack(h.context.doPost(request(allocation()))).status, 'duplicate');
-  assert.equal(ack(h.context.doPost(request())).code, 'COLLECTION_CLOSED');
-  assert.equal(h.sheet.cells.length, 1);
+  assert.equal(ack(h.context.doPost(request())).status, 'saved');
+  assert.equal(h.sheet.cells.length, 2);
+});
+
+test('896 allocations close enrollment without losing any reserved final response', () => {
+  const h = harness(); h.enable();
+  h.properties.set('MAX_ROWS', '896');
+  const cases = Array.from({ length: 896 }, (_, index) => {
+    const p = payload();
+    p.submission_id = `${(index + 1).toString(16).padStart(8, '0')}-2222-4222-8222-222222222222`;
+    return p;
+  });
+  for (const p of cases) assert.equal(h.context.persist_(allocation(p), h.context.config_()).status, 'saved');
+  assert.equal(ack(h.context.doPost(request(allocation()))).code, 'CAPACITY_REACHED');
+  h.properties.set('LIVE_ENABLED', 'false');
+  // A late administrator adjustment must not discard already accepted sessions.
+  h.properties.set('MAX_ROWS', '1');
+  for (const p of cases) assert.equal(h.context.persist_(p, h.context.config_()).status, 'saved');
+  assert.equal(h.sheets.get('Allocations').cells.length, 897);
+  assert.equal(h.sheet.cells.length, 897);
+  assert.equal(h.context.persist_(cases[895], h.context.config_()).status, 'duplicate');
 });
 
 test('allocation is recorded before exposure and can remain without a final response', () => {

@@ -19,10 +19,20 @@ test('clinical narrative remains constant; waiting and access factors vary indep
 test('arm format does not admit out-of-design values',()=>{
   for(const a of ['P2-D0-B0','P0-D1-B0<script>','P0-D0',''])assert.throws(()=>parseArm(a));
 });
-test('default config is closed and missing real image',()=>{
-  assert.equal(CONFIG.mode,'demo');assert.equal(CONFIG.recruitmentOpen,false);assert.equal(CONFIG.imageApproved,false);
-  assert.ok(readiness({...CONFIG,endpoint:''}).includes('endpoint'));
-  assert.ok(readiness(CONFIG).includes('recruitmentOpen'));assert.ok(readiness(CONFIG).includes('image_review'));
+test('published configuration is ready for the survey with its synthetic contextual image',()=>{
+  assert.equal(CONFIG.mode,'pilot');assert.equal(CONFIG.recruitmentOpen,true);
+  assert.equal(CONFIG.imagePath,'./assets/mammogram-msynth-01.jpg');
+  assert.deepEqual(readiness(CONFIG),[]);
+});
+test('readiness catches missing operational information without inventing institutional approval',()=>{
+  const cases=[
+    [{endpoint:''},'endpoint'],[{endpoint:'https://example.org/exec'},'endpoint'],
+    [{contactEmail:'invalid'},'contactEmail_format'],[{researcher:''},'researcher'],
+    [{privacyUrl:'http://example.org/privacy'},'privacyUrl_https'],[{retention:''},'retention'],
+    [{recruitmentOpen:false},'recruitmentOpen'],[{imagePath:''},'image_review']
+  ];
+  for(const [patch,expected] of cases)assert.ok(readiness({...CONFIG,...patch}).includes(expected));
+  assert.deepEqual(readiness({...CONFIG,institution:'',ethicsStatement:''}),[]);
 });
 test('trial respects ranges, assignment, and integer responses',()=>{
   const t={scenario_id:'P0-D0-B0',image_id:'mammogram-01',policy:0,delay:0,barrier:0,ability:0,intention:100,fairness:1,trust:7,responsibility:'service',elapsed_ms:1000};

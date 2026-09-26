@@ -122,7 +122,7 @@ function config_() {
   if (!Array.isArray(origins) || !origins.length || origins.some(function (origin) {
     return typeof origin !== 'string' || !/^(https:\/\/[a-z0-9.-]+(?::\d{1,5})?|http:\/\/(localhost|127\.0\.0\.1)(?::\d{1,5})?)$/.test(origin);
   })) fail_('NOT_CONFIGURED');
-  var maxRows = Number(props.getProperty('MAX_ROWS') || '5000');
+  var maxRows = Number(props.getProperty('MAX_ROWS') || '896');
   if (!Number.isInteger(maxRows) || maxRows < 1 || maxRows > 50000) fail_('NOT_CONFIGURED');
   return {
     spreadsheetId: spreadsheetId,
@@ -138,7 +138,7 @@ function config_() {
 function setup() {
   var props = PropertiesService.getScriptProperties();
   if (props.getProperty('LIVE_ENABLED') === null) props.setProperty('LIVE_ENABLED', 'false');
-  if (props.getProperty('MAX_ROWS') === null) props.setProperty('MAX_ROWS', '5000');
+  if (props.getProperty('MAX_ROWS') === null) props.setProperty('MAX_ROWS', '896');
   var cfg = config_();
   var lock = LockService.getScriptLock();
   if (!lock.tryLock(10000)) fail_('BUSY');
@@ -225,10 +225,12 @@ function persist_(payload, cfg) {
       // Closing recruitment must not prevent reconciliation of a lost receipt.
       return { status: 'duplicate', event: eventType };
     }
-    if (!cfg.liveEnabled) fail_('COLLECTION_CLOSED');
+    if (eventType === 'allocation' && !cfg.liveEnabled) fail_('COLLECTION_CLOSED');
     if (eventType === 'response') assertAllocation_(payload, allocation);
     var last = sheet.getLastRow();
-    if (last - 1 >= cfg.maxRows) fail_('CAPACITY_REACHED');
+    // The enrollment limit applies only to allocations. Each accepted allocation
+    // reserves one final response, including after closure or a lowered limit.
+    if (eventType === 'allocation' && last - 1 >= cfg.maxRows) fail_('CAPACITY_REACHED');
     var row = eventType === 'allocation' ? allocationRow_(payload, hash) : row_(payload, hash);
     if (last + 1 > sheet.getMaxRows()) sheet.insertRowsAfter(sheet.getMaxRows(), 100);
     // One session, one range write. No separate trial writes that could be partial.
