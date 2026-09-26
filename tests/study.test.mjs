@@ -21,7 +21,8 @@ test('arm format does not admit out-of-design values',()=>{
 });
 test('default config is closed and missing real image',()=>{
   assert.equal(CONFIG.mode,'demo');assert.equal(CONFIG.recruitmentOpen,false);assert.equal(CONFIG.imageApproved,false);
-  assert.ok(readiness(CONFIG).includes('endpoint'));assert.ok(readiness(CONFIG).includes('image_review'));
+  assert.ok(readiness({...CONFIG,endpoint:''}).includes('endpoint'));
+  assert.ok(readiness(CONFIG).includes('recruitmentOpen'));assert.ok(readiness(CONFIG).includes('image_review'));
 });
 test('trial respects ranges, assignment, and integer responses',()=>{
   const t={scenario_id:'P0-D0-B0',image_id:'mammogram-01',policy:0,delay:0,barrier:0,ability:0,intention:100,fairness:1,trust:7,responsibility:'service',elapsed_ms:1000};

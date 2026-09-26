@@ -2,7 +2,7 @@
 
 El sitio estático incluye una demostración local. **La demostración no envía respuestas.** Para un piloto consentido, este receptor registra una asignación antes de mostrar la viñeta y una respuesta final al terminar. La hoja de cálculo permanece privada: publicar GitHub Pages no requiere compartirla con participantes.
 
-Este directorio contiene el código de integración, no un despliegue ya verificado. Las pruebas locales comprueban el contrato, los reintentos y la persistencia simulada; la entrega real desde un navegador debe verificarse después de desplegar Apps Script. No introducir registros de pacientes ni imágenes clínicas en este sistema.
+El receptor está desplegado y configurado; la recogida permanece cerrada. La prueba real desde el navegador fue bloqueada (`ERR_BLOCKED_BY_CLIENT`) y no generó acuses ni filas de prueba. Las pruebas locales comprueban el contrato, los reintentos y la persistencia simulada, pero el transporte real sigue pendiente de verificación. Véase `VERIFICACION.md`. No introducir registros de pacientes ni imágenes clínicas en este sistema.
 
 ## 1. Preparar la hoja y el proyecto
 

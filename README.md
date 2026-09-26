@@ -2,7 +2,7 @@
 
 Prototipo de investigación en español: ocho viñetas ficticias, una por participante, sobre gestión de citas, espera y barreras prácticas después de un cribado mamográfico con IA.
 
-**Estado:** demo local revisable; no reclutamiento abierto. La generación integrada de una mamografía ficticia fue bloqueada y no existe aún imagen. La aplicación lo indica de forma visible. Los datos institucionales y el endpoint de Apps Script están vacíos. Ninguna respuesta de demo se envía ni se mezcla con datos de participantes. No se ha demostrado sincronización real hasta desplegar y verificar el recolector.
+**Estado:** [demo pública revisable](https://anibalmastobiza.github.io/mamografia-equidad-study/); no reclutamiento abierto. La generación integrada de una mamografía ficticia fue bloqueada y no existe aún imagen. La aplicación lo indica de forma visible. El recolector está desplegado y el endpoint configurado, pero la prueba integral fue bloqueada por el navegador (`ERR_BLOCKED_BY_CLIENT`), sin acuse ni filas en la hoja de prueba. No se ha demostrado sincronización real. La recogida se mantiene cerrada. Ninguna respuesta de demo se envía ni se mezcla con datos de participantes. Faltan también los datos institucionales, conservación y condiciones éticas definitivas.
 
 ## Pregunta e impacto
 
@@ -30,6 +30,7 @@ Abrir `http://localhost:8765`. En la demo puede elegirse cualquiera de las ocho 
 - `docs/GOOGLE_SHEETS.md`: recolector, esquema, configuración y prueba de sincronización.
 - `docs/ANALISIS.md`: análisis y sensibilidad a datos ausentes.
 - `analysis/`: scripts para analizar CSV exportados y explorar potencia bajo supuestos.
+- `docs/VERIFICACION.md`: comprobaciones realizadas y límites de la entrega.
 
 ## Google Sheets: privado, con confirmación de persistencia
 
