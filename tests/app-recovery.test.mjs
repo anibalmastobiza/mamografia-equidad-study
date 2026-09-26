@@ -65,8 +65,9 @@ test('only a real recovered ACK turns the preserved pilot submission into confir
   assert.equal(h.calls.length, 1);
   assert.equal(h.calls[0].payload.event, undefined);
   assert.equal(JSON.parse(h.store.get(`${baseKey}:pilot`)).stage, 'done');
-  assert.match(h.app.innerHTML, /Envío confirmado/);
-  assert.doesNotMatch(h.app.innerHTML, /Demo finalizada/);
+  assert.match(h.app.innerHTML, /Gracias por tu participación/);
+  assert.match(h.app.innerHTML, /Tus respuestas se han guardado/);
+  assert.doesNotMatch(h.app.innerHTML, /Has completado una demo|descarg|download/);
 });
 
 test('legacy completed receipt migrates and remains visible after collection closes', async () => {
@@ -74,8 +75,8 @@ test('legacy completed receipt migrates and remains visible after collection clo
   assert.equal(h.calls.length, 0);
   assert.equal(h.store.has(baseKey), false);
   assert.equal(JSON.parse(h.store.get(`${baseKey}:pilot`)).id, id);
-  assert.match(h.app.innerHTML, /Envío confirmado/);
-  assert.match(h.app.innerHTML, new RegExp(id));
+  assert.match(h.app.innerHTML, /Tus respuestas se han guardado/);
+  assert.doesNotMatch(h.app.innerHTML, new RegExp(id));
   assert.doesNotMatch(h.app.innerHTML, /id="restart"/);
 });
 
@@ -86,7 +87,8 @@ test('demo state cannot overwrite an existing active pilot state when collection
   assert.equal(h.calls.length, 0);
   assert.deepEqual(JSON.parse(h.store.get(`${baseKey}:pilot`)), pilot);
   assert.equal(JSON.parse(h.store.get(`${baseKey}:demo`)).id, demo.id);
-  assert.match(h.app.innerHTML, /Demo finalizada/);
+  assert.match(h.app.innerHTML, /Has completado una demo/);
+  assert.doesNotMatch(h.app.innerHTML, /descarg|download/);
 });
 
 test('unavailable receiver preserves the pending response without claiming success', async () => {
@@ -94,6 +96,6 @@ test('unavailable receiver preserves the pending response without claiming succe
   const h = await run({ [baseKey]: value });
   assert.equal(h.calls.length, 0);
   assert.equal(JSON.parse(h.store.get(`${baseKey}:pilot`)).stage, 'pending');
-  assert.match(h.app.innerHTML, /RECEIVER_UNAVAILABLE/);
-  assert.doesNotMatch(h.app.innerHTML, /Envío confirmado/);
+  assert.match(h.app.innerHTML, /No tenemos confirmación/);
+  assert.doesNotMatch(h.app.innerHTML, /Tus respuestas se han guardado|descarg|download/);
 });

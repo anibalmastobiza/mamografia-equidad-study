@@ -35,7 +35,7 @@ Abrir `http://localhost:8765`. En la demo puede elegirse cualquiera de las ocho 
 
 Después del consentimiento se registra una fila en `Allocations`. Solo cuando el servidor confirma esa asignación se muestra el estímulo. Al terminar se guarda una fila en `Responses`, con una viñeta serializada en `trials_json`. Se unen ambas tablas mediante un UUID seudónimo para conocer el denominador y el abandono por condición.
 
-La página estática envía un formulario a Apps Script; recibe un acuse `postMessage` con identificador, evento y nonce. No considera éxito un envío opaco con `no-cors`. Los reintentos son idempotentes. La respuesta permanece en la pestaña si falta confirmación y puede descargarse; ello no equivale a guardado remoto.
+La página estática envía un formulario a Apps Script; recibe un acuse `postMessage` con identificador, evento y nonce. No considera éxito un envío opaco con `no-cors`. Los reintentos son idempotentes. La respuesta permanece en la pestaña si falta confirmación para permitir el reintento; ello no equivale a guardado remoto. No se ofrece descarga al participante. Tras la confirmación se muestra un agradecimiento breve.
 
 Los proveedores pueden conservar registros técnicos: no se promete anonimato absoluto. El cuestionario no solicita nombre, correo, historia clínica, localización ni texto libre. No se guardan datos antes del consentimiento. La hoja nunca debe hacerse pública para permitir los envíos.
 
